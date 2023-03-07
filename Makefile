@@ -5,4 +5,4 @@ build:
 	--css style.css \
 	--toc \
 	--template template.html \
-	--metadata title="Tópicos em Desenvolvimento Web: Arquiteturas de Aplicações Web"
+	--metadata title="Desenvolvimento Web - Conceitos fundamentais"
