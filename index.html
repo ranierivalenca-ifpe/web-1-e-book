@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Tópicos em Desenvolvimento Web: Arquiteturas de Aplicações Web</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Tópicos em Desenvolvimento Web: Arquiteturas de
+Aplicações Web</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#introdução" id="toc-introdução">Introdução</a>
+<ul>
+<li><a href="#o-que-é-desenvolvimento-web"
+id="toc-o-que-é-desenvolvimento-web">O que é desenvolvimento
+web</a></li>
+<li><a
+href="#como-a-web-funciona-arquitetura-cliente-servidor-e-protocolo-http"
+id="toc-como-a-web-funciona-arquitetura-cliente-servidor-e-protocolo-http">Como
+a web funciona: arquitetura cliente-servidor e protocolo HTTP</a>
+<ul>
+<li><a href="#definição-e-funcionamento"
+id="toc-definição-e-funcionamento">Definição e funcionamento</a></li>
+<li><a href="#componentes" id="toc-componentes">Componentes</a></li>
+<li><a href="#vantagens-e-desvantagens"
+id="toc-vantagens-e-desvantagens">Vantagens e desvantagens</a></li>
+<li><a href="#exemplo-de-aplicação-de-arquitetura-cliente-servidor"
+id="toc-exemplo-de-aplicação-de-arquitetura-cliente-servidor">Exemplo de
+aplicação de arquitetura cliente-servidor</a></li>
+</ul></li>
+<li><a href="#protocolo-http" id="toc-protocolo-http">Protocolo HTTP</a>
+<ul>
+<li><a href="#definição-e-características"
+id="toc-definição-e-características">Definição e
+características</a></li>
+<li><a href="#métodos-http" id="toc-métodos-http">Métodos HTTP</a></li>
+<li><a href="#códigos-de-status-http"
+id="toc-códigos-de-status-http">Códigos de status HTTP</a></li>
+<li><a href="#cabeçalhos-http" id="toc-cabeçalhos-http">Cabeçalhos
+HTTP</a></li>
+<li><a href="#métodos-http-get-post-put-delete"
+id="toc-métodos-http-get-post-put-delete">Métodos HTTP (GET, POST, PUT,
+DELETE)</a></li>
+<li><a href="#status-http-códigos-de-resposta"
+id="toc-status-http-códigos-de-resposta">Status HTTP (códigos de
+resposta)</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#php-básico" id="toc-php-básico">PHP Básico</a>
+<ul>
+<li><a href="#o-que-é-php" id="toc-o-que-é-php">O que é PHP</a></li>
+<li><a href="#instalação-do-php" id="toc-instalação-do-php">Instalação
+do PHP</a>
+<ul>
+<li><a href="#instalação-do-php-no-windows"
+id="toc-instalação-do-php-no-windows">Instalação do PHP no
+Windows</a></li>
+<li><a href="#instalação-do-php-no-linux-ubuntu"
+id="toc-instalação-do-php-no-linux-ubuntu">Instalação do PHP no Linux
+(Ubuntu)</a></li>
+<li><a href="#executando-scripts-php"
+id="toc-executando-scripts-php">Executando scripts PHP</a></li>
+</ul></li>
+<li><a href="#sintaxe-básica-do-php"
+id="toc-sintaxe-básica-do-php">Sintaxe básica do PHP</a></li>
+<li><a href="#variáveis-tipos-de-dados-e-operadores"
+id="toc-variáveis-tipos-de-dados-e-operadores">Variáveis, tipos de dados
+e operadores</a>
+<ul>
+<li><a href="#variáveis" id="toc-variáveis">Variáveis</a></li>
+</ul></li>
+<li><a href="#estruturas-de-controle-de-fluxo-if-else-switch-case-loops"
+id="toc-estruturas-de-controle-de-fluxo-if-else-switch-case-loops">Estruturas
+de controle de fluxo: if-else, switch-case, loops</a>
+<ul>
+<li><a href="#estrutura-condicional-if-else"
+id="toc-estrutura-condicional-if-else">Estrutura condicional
+if-else</a></li>
+<li><a href="#estrutura-condicional-switch-case"
+id="toc-estrutura-condicional-switch-case">Estrutura condicional
+switch-case</a></li>
+<li><a href="#loops" id="toc-loops">Loops</a></li>
+</ul></li>
+<li><a href="#funções-e-escopo-de-variáveis"
+id="toc-funções-e-escopo-de-variáveis">Funções e escopo de variáveis</a>
+<ul>
+<li><a href="#definição-e-declaração-de-funções"
+id="toc-definição-e-declaração-de-funções">Definição e declaração de
+funções</a></li>
+<li><a href="#escopo-de-variáveis" id="toc-escopo-de-variáveis">Escopo
+de variáveis</a></li>
+<li><a href="#retorno-de-valores" id="toc-retorno-de-valores">Retorno de
+valores</a></li>
+<li><a href="#exemplo-completo-de-função-em-php"
+id="toc-exemplo-completo-de-função-em-php">Exemplo completo de função em
+PHP</a></li>
+</ul></li>
+<li><a href="#array-e-manipulação-de-strings"
+id="toc-array-e-manipulação-de-strings">Array e manipulação de
+strings</a>
+<ul>
+<li><a href="#arrays-em-php" id="toc-arrays-em-php">Arrays em
+PHP</a></li>
+<li><a href="#indexação-associativa"
+id="toc-indexação-associativa">Indexação associativa</a></li>
+<li><a href="#arrays-multidimensionais"
+id="toc-arrays-multidimensionais">Arrays multidimensionais</a></li>
+<li><a href="#manipulação-de-strings-em-php"
+id="toc-manipulação-de-strings-em-php">Manipulação de strings em
+PHP</a></li>
+</ul></li>
+<li><a href="#funções-comuns-em-php"
+id="toc-funções-comuns-em-php">Funções comuns em PHP</a>
+<ul>
+<li><a href="#funções-de-data-e-hora"
+id="toc-funções-de-data-e-hora">Funções de data e hora</a></li>
+<li><a href="#funções-de-manipulação-de-arquivos"
+id="toc-funções-de-manipulação-de-arquivos">Funções de manipulação de
+arquivos</a></li>
+<li><a href="#funções-de-manipulação-de-strings"
+id="toc-funções-de-manipulação-de-strings">Funções de manipulação de
+strings</a></li>
+<li><a href="#funções-matemáticas" id="toc-funções-matemáticas">Funções
+matemáticas</a></li>
+<li><a href="#exemplo" id="toc-exemplo">Exemplo</a></li>
+</ul></li>
+<li><a href="#manipulação-de-arquivos-csv-com-php"
+id="toc-manipulação-de-arquivos-csv-com-php">Manipulação de arquivos CSV
+com PHP</a>
+<ul>
+<li><a href="#o-que-é-um-arquivo-csv" id="toc-o-que-é-um-arquivo-csv">O
+que é um arquivo CSV?</a></li>
+<li><a href="#lendo-um-arquivo-csv-com-php"
+id="toc-lendo-um-arquivo-csv-com-php">Lendo um arquivo CSV com
+PHP</a></li>
+<li><a href="#escrevendo-em-um-arquivo-csv-com-php"
+id="toc-escrevendo-em-um-arquivo-csv-com-php">Escrevendo em um arquivo
+CSV com PHP</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#manipulação-de-arquivos-e-crud"
+id="toc-manipulação-de-arquivos-e-crud">Manipulação de Arquivos e
+CRUD</a>
+<ul>
+<li><a
+href="#manipulação-de-arquivos-com-php-criar-abrir-ler-escrever-fechar-e-excluir-arquivos"
+id="toc-manipulação-de-arquivos-com-php-criar-abrir-ler-escrever-fechar-e-excluir-arquivos">Manipulação
+de arquivos com PHP: criar, abrir, ler, escrever, fechar e excluir
+arquivos</a>
+<ul>
+<li><a href="#criar-um-arquivo" id="toc-criar-um-arquivo">Criar um
+arquivo</a></li>
+<li><a href="#abrir-um-arquivo" id="toc-abrir-um-arquivo">Abrir um
+arquivo</a></li>
+<li><a href="#ler-o-conteúdo-de-um-arquivo"
+id="toc-ler-o-conteúdo-de-um-arquivo">Ler o conteúdo de um
+arquivo</a></li>
+<li><a href="#escrever-no-arquivo" id="toc-escrever-no-arquivo">Escrever
+no arquivo</a></li>
+<li><a href="#fechar-um-arquivo" id="toc-fechar-um-arquivo">Fechar um
+arquivo</a></li>
+<li><a href="#excluir-um-arquivo" id="toc-excluir-um-arquivo">Excluir um
+arquivo</a></li>
+</ul></li>
+<li><a href="#conceitos-crud-create-read-update-delete"
+id="toc-conceitos-crud-create-read-update-delete">Conceitos CRUD
+(Create, Read, Update, Delete)</a></li>
+<li><a href="#implementando-crud-em-php-usando-arquivos-csv"
+id="toc-implementando-crud-em-php-usando-arquivos-csv">Implementando
+CRUD em PHP usando arquivos CSV</a>
+<ul>
+<li><a href="#formulário-e-back-end-para-criar-registro"
+id="toc-formulário-e-back-end-para-criar-registro">Formulário e back-end
+para criar registro</a></li>
+<li><a href="#página-de-leitura-dos-dados"
+id="toc-página-de-leitura-dos-dados">Página de leitura dos
+dados</a></li>
+<li><a href="#removendo-registro" id="toc-removendo-registro">Removendo
+registro</a></li>
+<li><a href="#formulário-de-edição-de-registro"
+id="toc-formulário-de-edição-de-registro">Formulário de edição de
+registro</a></li>
+<li><a href="#back-end-para-atualização-de-registro"
+id="toc-back-end-para-atualização-de-registro">Back-end para atualização
+de registro</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#conexão-com-banco-de-dados"
+id="toc-conexão-com-banco-de-dados">Conexão com Banco de Dados</a>
+<ul>
+<li><a href="#introdução-a-bancos-de-dados"
+id="toc-introdução-a-bancos-de-dados">Introdução a bancos de
+dados</a></li>
+<li><a href="#conexão-com-banco-de-dados-usando-mysqli-e-pdo"
+id="toc-conexão-com-banco-de-dados-usando-mysqli-e-pdo">Conexão com
+banco de dados usando mysqli e PDO</a></li>
+<li><a href="#execução-de-consultas-sql-usando-php"
+id="toc-execução-de-consultas-sql-usando-php">Execução de consultas SQL
+usando PHP</a></li>
+<li><a href="#prevenção-de-sql-injection"
+id="toc-prevenção-de-sql-injection">Prevenção de SQL Injection</a></li>
+</ul></li>
+<li><a href="#crud-com-banco-de-dados"
+id="toc-crud-com-banco-de-dados">CRUD com Banco de Dados</a>
+<ul>
+<li><a href="#implementação-do-crud-em-php-usando-mysql"
+id="toc-implementação-do-crud-em-php-usando-mysql">Implementação do CRUD
+em PHP usando MySQL</a></li>
+<li><a href="#manipulação-de-dados-em-tabelas-mysql-com-php"
+id="toc-manipulação-de-dados-em-tabelas-mysql-com-php">Manipulação de
+dados em tabelas MySQL com PHP</a></li>
+</ul></li>
+<li><a href="#autenticação-e-autorização"
+id="toc-autenticação-e-autorização">Autenticação e Autorização</a>
+<ul>
+<li><a href="#cookies-e-sessões" id="toc-cookies-e-sessões">Cookies e
+sessões</a></li>
+<li><a href="#mecanismos-de-autenticação-usando-sessões-em-php"
+id="toc-mecanismos-de-autenticação-usando-sessões-em-php">Mecanismos de
+autenticação usando sessões em PHP</a></li>
+<li><a href="#apis-e-como-trabalhar-com-elas"
+id="toc-apis-e-como-trabalhar-com-elas">APIs e como trabalhar com
+elas</a></li>
+<li><a href="#autenticação-usando-apis-php-e-jwt"
+id="toc-autenticação-usando-apis-php-e-jwt">Autenticação usando APIs PHP
+e JWT</a></li>
+</ul></li>
+<li><a href="#conexão-entre-front-end-e-back-end"
+id="toc-conexão-entre-front-end-e-back-end">Conexão entre Front-End e
+Back-End</a>
+<ul>
+<li><a href="#introdução-à-conexão-entre-front-end-e-back-end"
+id="toc-introdução-à-conexão-entre-front-end-e-back-end">Introdução à
+conexão entre front-end e back-end</a></li>
+<li><a href="#como-enviar-dados-de-formulários-html-para-um-script-php"
+id="toc-como-enviar-dados-de-formulários-html-para-um-script-php">Como
+enviar dados de formulários HTML para um script PHP</a></li>
+<li><a
+href="#como-enviar-respostas-json-de-volta-para-o-front-end-a-partir-do-back-end"
+id="toc-como-enviar-respostas-json-de-volta-para-o-front-end-a-partir-do-back-end">Como
+enviar respostas JSON de volta para o front-end a partir do
+back-end</a></li>
+<li><a href="#cors" id="toc-cors">CORS</a>
+<ul>
+<li><a href="#definição-e-funcionamento-1"
+id="toc-definição-e-funcionamento-1">Definição e funcionamento</a></li>
+<li><a href="#como-lidar-com-cors-no-desenvolvimento-web"
+id="toc-como-lidar-com-cors-no-desenvolvimento-web">Como lidar com CORS
+no desenvolvimento web</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="introdução">Introdução</h1>
+<h2 id="o-que-é-desenvolvimento-web">O que é desenvolvimento web</h2>
+<p>Desenvolvimento web é a prática de criar aplicativos e páginas web
+que são executados em um navegador da web ou em um servidor web. Ele
+envolve a criação de sites, aplicações e serviços web que são acessados
+através da internet ou de uma intranet. O desenvolvimento web pode
+envolver diferentes tecnologias e ferramentas, incluindo linguagens de
+programação, bancos de dados, servidores web, frameworks, bibliotecas e
+APIs.</p>
+<p>Existem diferentes áreas de especialização no desenvolvimento web,
+incluindo front-end, back-end e desenvolvimento full-stack. O front-end
+envolve a criação da interface de usuário e a experiência do usuário em
+um site ou aplicativo, usando tecnologias como HTML, CSS e JavaScript,
+bem como frameworks como React, Angular e Vue.js. O back-end envolve a
+criação da lógica de negócios e a interação com bancos de dados e outros
+sistemas, usando linguagens de programação como PHP, Java e Python, além
+de frameworks como Laravel, Spring e Django. O desenvolvimento
+full-stack envolve a combinação de front-end e back-end, utilizando as
+tecnologias e frameworks apropriados para criar aplicativos completos e
+funcionais.</p>
+<p>O desenvolvimento web é uma área em constante evolução, com novas
+tecnologias, frameworks e ferramentas surgindo regularmente. Como
+resultado, é importante para os desenvolvedores web manterem-se
+atualizados e adaptáveis às mudanças na indústria.</p>
+<h2
+id="como-a-web-funciona-arquitetura-cliente-servidor-e-protocolo-http">Como
+a web funciona: arquitetura cliente-servidor e protocolo HTTP</h2>
+<h3 id="definição-e-funcionamento">Definição e funcionamento</h3>
+<p>A arquitetura cliente-servidor é um modelo de comunicação entre
+sistemas em que um cliente faz uma solicitação a um servidor e recebe
+uma resposta. Na web, o navegador do usuário atua como o cliente,
+enquanto o servidor que hospeda o site ou aplicativo web é responsável
+por processar a solicitação e enviar uma resposta de volta.</p>
+<p>Essa arquitetura é amplamente utilizada na web porque permite a
+criação de aplicativos distribuídos, em que diferentes partes do
+aplicativo são executadas em diferentes sistemas, além de permitir o
+acesso simultâneo de vários usuários. A comunicação entre o cliente e o
+servidor ocorre geralmente através do protocolo HTTP, embora outros
+protocolos também possam ser utilizados.</p>
+<h3 id="componentes">Componentes</h3>
+<p>Na arquitetura cliente-servidor, existem dois componentes principais:
+o cliente e o servidor. O cliente é responsável por enviar solicitações
+para o servidor, enquanto o servidor é responsável por processar essas
+solicitações e enviar respostas de volta.</p>
+<h4 id="cliente">Cliente</h4>
+<p>O cliente é a parte do sistema que inicia a comunicação e faz a
+solicitação ao servidor. Na web, o navegador é um dos possíveis clientes
+e é responsável por exibir o conteúdo para o usuário. Quando um usuário
+digita um endereço URL no navegador, o navegador envia uma solicitação
+HTTP para o servidor correspondente.</p>
+<p>Outros exemplos de clientes incluem algumas aplicações mobile (como
+aplicações de redes sociais), leitores de tela e programas de terminal
+como o CURL. Além disso é possível programar um cliente utilizando as
+mais diversas linguagens de programação.</p>
+<h4 id="servidor">Servidor</h4>
+<p>O servidor é a parte do sistema que recebe a solicitação do cliente,
+processa-a e envia uma resposta de volta. O servidor geralmente executa
+um aplicativo web que processa as solicitações recebidas, acessa bancos
+de dados, realiza cálculos e retorna uma resposta para o cliente. O
+servidor também pode armazenar e gerenciar arquivos e outros recursos
+necessários para o aplicativo web.</p>
+<h3 id="vantagens-e-desvantagens">Vantagens e desvantagens</h3>
+<p>A arquitetura cliente-servidor apresenta várias vantagens e
+desvantagens. Algumas das vantagens incluem:</p>
+<ul>
+<li>Escalabilidade: o modelo cliente-servidor permite a criação de
+aplicativos distribuídos que podem ser executados em diferentes
+sistemas, permitindo que o sistema seja escalável.</li>
+<li>Flexibilidade: o modelo cliente-servidor é flexível e pode ser
+implementado usando diferentes tecnologias e protocolos de
+comunicação.</li>
+<li>Confiabilidade: o modelo cliente-servidor é geralmente confiável e
+pode ser projetado para lidar com falhas e interrupções na
+comunicação.</li>
+</ul>
+<p>Algumas das desvantagens incluem:</p>
+<ul>
+<li>Complexidade: a arquitetura cliente-servidor pode ser complexa e
+requer uma infraestrutura robusta para suportar a comunicação entre
+diferentes sistemas.</li>
+<li>Latência: a comunicação entre o cliente e o servidor pode levar
+tempo, o que pode resultar em latência para o usuário.</li>
+<li>Custo: a implementação da arquitetura cliente-servidor pode ser
+cara, especialmente se for necessário suportar um grande número de
+usuários ou um grande volume de tráfego.</li>
+</ul>
+<h3 id="exemplo-de-aplicação-de-arquitetura-cliente-servidor">Exemplo de
+aplicação de arquitetura cliente-servidor</h3>
+<p>Um exemplo comum de aplicação da arquitetura cliente-servidor é um
+aplicativo web que permite aos usuários fazer login e gerenciar suas
+informações pessoais. Quando um usuário digita o endereço do aplicativo
+em um navegador, o navegador envia uma solicitação HTTP para o servidor
+correspondente.</p>
+<p>O servidor processa a solicitação e verifica se o usuário tem
+permissão para acessar a página de login. Se o usuário tiver permissão,
+o servidor envia uma resposta HTTP contendo a página de login para o
+navegador.</p>
+<p>Quando o usuário insere suas credenciais de login e clica no botão
+“Enviar”, o navegador envia uma solicitação HTTP contendo as informações
+do formulário para o servidor. O servidor verifica as informações do
+formulário e, se as credenciais estiverem corretas, envia uma resposta
+HTTP contendo as informações da conta do usuário para o navegador.</p>
+<p>O navegador exibe as informações da conta do usuário para o usuário e
+permite que o usuário gerencie suas informações pessoais. Quando o
+usuário faz alterações em suas informações pessoais, o navegador envia
+uma solicitação HTTP contendo as informações atualizadas para o
+servidor. O servidor processa a solicitação e atualiza as informações do
+usuário no banco de dados.</p>
+<p>Em resumo, a arquitetura cliente-servidor permite que o usuário
+interaja com um aplicativo web por meio do navegador, enquanto o
+servidor processa as solicitações e envia respostas de volta para o
+navegador. Isso permite a criação de aplicativos distribuídos e
+escaláveis que podem ser acessados por vários usuários
+simultaneamente.</p>
+<h2 id="protocolo-http">Protocolo HTTP</h2>
+<h3 id="definição-e-características">Definição e características</h3>
+<p>O Protocolo de Transferência de Hipertexto (HTTP, do inglês Hypertext
+Transfer Protocol) é um protocolo de comunicação usado para transferir
+dados pela internet. Ele é a base para a comunicação de dados na World
+Wide Web (www), permitindo que os usuários acessem, solicitem e
+transfiram informações de servidores web para navegadores de
+internet.</p>
+<p>O HTTP é um protocolo sem estado (<strong>stateless</strong>), o que
+significa que ele não mantém informações sobre as solicitações
+anteriores feitas pelo cliente. Cada solicitação é tratada
+independentemente das anteriores, tornando-o mais simples e
+eficiente.</p>
+<p>O protocolo HTTP é baseado em um modelo de requisição-resposta, no
+qual o cliente envia uma solicitação ao servidor, contendo informações
+sobre o recurso que ele deseja acessar, e o servidor responde com os
+dados solicitados ou uma mensagem de erro, se houver.</p>
+<h3 id="métodos-http">Métodos HTTP</h3>
+<p>O HTTP define uma série de métodos que indicam o tipo de ação a ser
+executada na solicitação. Os métodos HTTP mais comuns são:</p>
+<ul>
+<li>GET: solicita a representação de um recurso específico;</li>
+<li>POST: envia dados para serem processados por um recurso identificado
+pela URL;</li>
+<li>PUT: atualiza o estado de um recurso identificado pela URL;</li>
+<li>DELETE: remove um recurso identificado pela URL.</li>
+</ul>
+<h3 id="códigos-de-status-http">Códigos de status HTTP</h3>
+<p>O HTTP utiliza códigos de status para indicar o resultado da
+solicitação. Os códigos de status mais comuns são:</p>
+<ul>
+<li>200 OK: indica que a solicitação foi bem-sucedida;</li>
+<li>404 Not Found: indica que o recurso solicitado não foi
+encontrado;</li>
+<li>500 Internal Server Error: indica que ocorreu um erro interno no
+servidor.</li>
+</ul>
+<h3 id="cabeçalhos-http">Cabeçalhos HTTP</h3>
+<p>Os cabeçalhos HTTP são informações adicionais enviadas junto com as
+solicitações e respostas HTTP, permitindo que mais detalhes sobre a
+transmissão dos dados sejam especificados.</p>
+<p>Existem vários tipos de cabeçalhos HTTP, cada um com uma finalidade
+específica. Alguns exemplos de cabeçalhos comuns incluem:</p>
+<ul>
+<li>Content-Type: indica o tipo de conteúdo sendo enviado ou recebido,
+como texto, HTML, imagem, JSON, entre outros;</li>
+<li>Content-Length: indica o tamanho do conteúdo que está sendo enviado
+ou recebido;</li>
+<li>Authorization: usado para autenticação, permitindo que o cliente se
+identifique perante o servidor em certos tipos de aplicação;</li>
+<li>User-Agent: indica o tipo de navegador ou aplicativo que está sendo
+usado para fazer a solicitação;</li>
+<li>Cache-Control: usado para controlar o armazenamento em cache de
+respostas HTTP, melhorando a eficiência das solicitações
+subsequentes;</li>
+<li>Set-cookie: usado na resposta do servidor indicando que o cliente
+deve salvar um certa informação em sua memória que deve ser enviada em
+cada requisição subsequente;</li>
+<li>Cookie: usado na requisição do cliente para enviar um pedaço de
+informação previamente armazenada para o servidor.</li>
+</ul>
+<p>Além dos cabeçalhos mencionados acima, existem muitos outros tipos de
+cabeçalhos HTTP, cada um com uma finalidade específica. É importante
+entender como usar os cabeçalhos HTTP corretamente para garantir que as
+solicitações e respostas sejam tratadas corretamente pelo servidor e
+pelos clientes.</p>
+<h3 id="métodos-http-get-post-put-delete">Métodos HTTP (GET, POST, PUT,
+DELETE)</h3>
+<p>Os métodos HTTP são usados para indicar o tipo de ação a ser
+executada em uma solicitação HTTP. Existem vários métodos definidos no
+protocolo HTTP, mas os mais comuns são:</p>
+<ul>
+<li>GET: solicita a representação de um recurso específico. É geralmente
+usado para recuperar informações do servidor, como páginas HTML,
+imagens, arquivos de áudio e vídeo, entre outros. Uma solicitação GET
+não deve ter efeito colateral no servidor.</li>
+<li>POST: envia dados para serem processados por um recurso identificado
+pela URL. É geralmente usado para enviar informações de formulários,
+criar um novo recurso, enviar uma mensagem, entre outros. Uma
+solicitação POST pode ter efeitos colaterais no servidor.</li>
+<li>PUT: atualiza o estado de um recurso identificado pela URL. É
+geralmente usado para atualizar um recurso existente com novas
+informações.</li>
+<li>DELETE: remove um recurso identificado pela URL. É geralmente usado
+para excluir um recurso existente.</li>
+</ul>
+<p>Além desses métodos, o HTTP define outros métodos menos comuns, como
+HEAD, OPTIONS, CONNECT, TRACE e PATCH, cada um com suas funções
+específicas.</p>
+<p>É importante entender os diferentes métodos HTTP e quando usá-los
+corretamente. O uso adequado dos métodos HTTP é uma das chaves para
+garantir a segurança, eficiência e confiabilidade de uma aplicação web.
+Você pode obter mais informações sobre cabeçalhos HTTP <a
+href="https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Headers">aqui</a></p>
+<h3 id="status-http-códigos-de-resposta">Status HTTP (códigos de
+resposta)</h3>
+<p>Os códigos de status HTTP são usados para indicar o resultado de uma
+solicitação HTTP. Existem vários códigos de status HTTP definidos no
+protocolo HTTP, mas os mais comuns são:</p>
+<ul>
+<li>2xx (sucesso): indica que a solicitação foi bem-sucedida e que o
+servidor conseguiu processar a solicitação com êxito. Alguns exemplos de
+códigos 2xx incluem 200 (OK), 201 (Created) e 204 (No Content).</li>
+<li>3xx (redirecionamento): indica que o cliente deve tomar alguma ação
+adicional para completar a solicitação. Alguns exemplos de códigos 3xx
+incluem 301 (Moved Permanently), 302 (Found) e 307 (Temporary
+Redirect).</li>
+<li>4xx (erro do cliente): indica que a solicitação contém um erro ou
+não pode ser processada pelo servidor. Alguns exemplos de códigos 4xx
+incluem 400 (Bad Request), 401 (Unauthorized) e 404 (Not Found).</li>
+<li>5xx (erro do servidor): indica que ocorreu um erro no servidor ao
+processar a solicitação. Alguns exemplos de códigos 5xx incluem 500
+(Internal Server Error), 503 (Service Unavailable) e 504 (Gateway
+Timeout).</li>
+</ul>
+<p>Cada código de status HTTP tem uma finalidade específica e é
+importante entender o significado de cada um deles. O uso adequado dos
+códigos de status HTTP é uma das chaves para garantir a segurança,
+eficiência e confiabilidade de uma aplicação web.</p>
+<h1 id="php-básico">PHP Básico</h1>
+<h2 id="o-que-é-php">O que é PHP</h2>
+<p>PHP (Hypertext Preprocessor) é uma linguagem de programação de código
+aberto muito popular para o desenvolvimento de aplicativos web. O PHP é
+executado do lado do servidor, o que significa que o código é executado
+no servidor antes de ser enviado ao navegador do usuário. O PHP é
+especialmente adequado para o desenvolvimento de aplicativos web
+dinâmicos, que podem interagir com o usuário, acessar bancos de dados e
+gerar conteúdo dinamicamente.</p>
+<p>O PHP foi desenvolvido originalmente em 1994 por Rasmus Lerdorf como
+um conjunto de scripts para monitorar visitas em seu site pessoal. Desde
+então, a linguagem evoluiu significativamente e hoje é amplamente
+utilizada em todo o mundo por desenvolvedores de aplicativos web.</p>
+<p>Uma das principais vantagens do PHP é a facilidade de aprendizado e
+uso. O PHP é uma linguagem de script, o que significa que o código é
+executado linha por linha, sem a necessidade de compilação ou
+vinculação. Além disso, existem muitos recursos e documentação
+disponíveis para ajudar os desenvolvedores a aprender e usar o PHP com
+eficiência.</p>
+<p>A documentação oficial assim como outras informações sobre a
+linguagem estão disponíveis no site oficial, <a
+href="https://www.php.net/">php.net</a></p>
+<h2 id="instalação-do-php">Instalação do PHP</h2>
+<p>Para instalar o PHP em um ambiente de desenvolvimento web, é possível
+seguir diferentes etapas dependendo do sistema operacional que você está
+utilizando. A seguir, vamos descrever os passos necessários para
+instalar o PHP tanto no sistema operacional Windows quanto no Linux
+(Ubuntu), incluindo a instalação do PHP 8.1 através do repositório
+Ondřej.</p>
+<h3 id="instalação-do-php-no-windows">Instalação do PHP no Windows</h3>
+<ol type="1">
+<li>Baixe o PHP a partir do site oficial do PHP em
+https://windows.php.net/download/.</li>
+<li>Descompacte em um diretório de sua escolha (geralmente na raiz de
+C).</li>
+<li>Adicione o caminho do diretório que contém o arquivo
+<code>php.exe</code> na variável de ambiente PATH do seu sistema
+operacional.</li>
+<li>Abra o terminal do Windows e execute o seguinte comando para
+verificar se o PHP foi instalado corretamente:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> <span class="at">-v</span></span></code></pre></div>
+<h3 id="instalação-do-php-no-linux-ubuntu">Instalação do PHP no Linux
+(Ubuntu)</h3>
+<ol type="1">
+<li>Adicione o repositório Ondřej para instalar a versão mais recente do
+PHP (aqui, a 8.1). Para isso, abra o terminal e execute os seguintes
+comandos:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install software-properties-common</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ondrej/php</span></code></pre></div>
+<ol start="2" type="1">
+<li>Em seguida, atualize o cache do apt e instale o PHP com os módulos
+desejados. Para instalar o PHP 8.1 e o módulo de suporte do Apache,
+execute o seguinte comando:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install php8.1 php8.1-mysql</span></code></pre></div>
+<ol start="3" type="1">
+<li>Para verificar se o PHP foi instalado corretamente, execute o
+seguinte comando:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> <span class="at">-v</span></span></code></pre></div>
+<p>Pronto! Agora você tem o PHP instalado e pronto para começar a
+desenvolver aplicativos web. Lembre-se de que as configurações e os
+procedimentos de instalação podem variar de acordo com a distribuição
+Linux ou a versão do Windows que você está utilizando.</p>
+<h3 id="executando-scripts-php">Executando scripts PHP</h3>
+<p>Para executar um script PHP, salve o arquivo com a extensão “.php” em
+seguida digite o comando <code>php nomedoarquivo.php</code> para ver o
+resultado da sua execução no terminal.</p>
+<p>Você também pode executar o servidor embutido de testes do PHP em
+qualquer diretório do seu computador. Para isso, basta acessar o
+diretório através do terminal e digitar o seguinte comando:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> <span class="at">-S</span> localhost:8000</span></code></pre></div>
+<p>Nesse caso, o servidor estará escutando por requisições feitas a
+partir da própria máquina (<code>localhost</code>) na porta 8000. Esses
+parâmetros podem ser mudados conforme suas preferências e necessidades
+de desenvolvimento.</p>
+<h2 id="sintaxe-básica-do-php">Sintaxe básica do PHP</h2>
+<p>Nesta seção, vamos abordar a sintaxe básica do PHP. O PHP é uma
+linguagem de programação baseada em scripts, o que significa que não é
+necessário compilar o código antes de executá-lo. O código PHP é
+inserido em um documento HTML e é processado pelo servidor antes que o
+HTML seja enviado para o navegador.</p>
+<p>O PHP é uma linguagem <em>case sensitive</em>, o que significa que
+ela diferencia letras maiúsculas e minúsculas. Portanto, é importante
+prestar atenção à escrita do código para evitar erros. Além disso, é
+possível misturar código PHP com HTML, o que permite que o desenvolvedor
+crie páginas dinâmicas, com conteúdo que varia de acordo com o código
+PHP.</p>
+<p>Para criar um bloco de código PHP, você deve colocar o código entre
+as tags <code>&lt;?php</code> e <code>?&gt;</code>. Por exemplo, o
+código a seguir exibe “Hello World!” na página:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">&quot;Hello World!&quot;</span><span class="ot">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div>
+<p>O <code>echo</code> é uma função que exibe uma mensagem na tela. É
+importante lembrar que cada comando em PHP deve terminar com
+<code>;</code>.</p>
+<p>Uma forma rápida de escrever algo (<code>echo</code>) usando PHP é
+delimitando o que se quer escrever entre as tags <code>&lt;?=</code> e
+<code>?&gt;</code>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?</span><span class="op">=</span> <span class="st">&quot;Hello World!&quot;</span> <span class="kw">?&gt;</span></span></code></pre></div>
+<p>O código acima faz exatamente o mesmo que o anterior, porém de uma
+forma mais concisa. É importamte lembrar que esta sintaxe tem o comando
+<code>echo</code> embutido, portanto só deve ser utilizada para escrever
+algo na página.</p>
+<p>Para fazer comentários em linha no PHP, utiliza-se a sintaxe
+<code>//</code>. Por exemplo:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Este é um comentário em linha</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">&quot;Hello World!&quot;</span><span class="ot">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div>
+<p>Já para fazer comentários em bloco, utiliza-se a sintaxe
+<code>/* */</code>. Por exemplo:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Este é um comentário em bloco</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    que se estende por várias linhas</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">    */</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">&quot;Hello World!&quot;</span><span class="ot">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div>
+<p>Comentários são úteis para explicar o código para outros
+desenvolvedores e para lembrar de mudanças que precisam ser feitas no
+futuro.</p>
+<h2 id="variáveis-tipos-de-dados-e-operadores">Variáveis, tipos de dados
+e operadores</h2>
+<p>Nesta seção, vamos abordar variáveis, tipos de dados e operadores em
+PHP.</p>
+<h3 id="variáveis">Variáveis</h3>
+<p>Uma variável é um local de armazenamento que contém um valor. O nome
+de uma variável deve começar com um caractere alfabético e pode conter
+letras, números e sublinhados. Em PHP, as variáveis são declaradas com o
+prefixo <code>$</code>. Por exemplo:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome</span> <span class="op">=</span> <span class="st">&quot;João&quot;</span><span class="ot">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="va">$idade</span> <span class="op">=</span> <span class="dv">25</span><span class="ot">;</span></span></code></pre></div>
+<p>Neste exemplo, a variável <code>$nome</code> contém uma string
+<code>"João"</code> e a variável <code>$idade</code> contém um inteiro
+<code>25</code>.</p>
+<h4 id="tipos-de-dados">Tipos de dados</h4>
+<p>PHP é uma linguagem dinamicamente tipada, o que significa que as
+variáveis não precisam ser declaradas com um tipo específico. O tipo de
+uma variável é determinado pelo valor que ela contém. Alguns tipos de
+dados em PHP incluem:</p>
+<ul>
+<li>Strings: sequência de caracteres alfanuméricos, delimitadas por
+aspas simples (<code>'</code>) ou duplas (<code>"</code>).</li>
+<li>Inteiros: números inteiros, positivos ou negativos.</li>
+<li>Floats: números com casas decimais.</li>
+<li>Booleanos: valores <code>true</code> ou <code>false</code>.</li>
+<li>Arrays: coleção de valores, indexados por chave.</li>
+<li>Objetos: instâncias de uma classe.</li>
+<li>NULL: valor nulo.</li>
+</ul>
+<h4 id="operadores">Operadores</h4>
+<p>Operadores são símbolos ou palavras-chave que realizam operações em
+variáveis e valores. Alguns dos operadores mais comuns em PHP
+incluem:</p>
+<ul>
+<li>Aritméticos: <code>+</code>, <code>-</code>, <code>*</code>,
+<code>/</code>, <code>%</code>.</li>
+<li>Atribuição: <code>=</code>, <code>+=</code>, <code>-=</code>,
+<code>*=</code>, <code>/=</code>, <code>%=</code>.</li>
+<li>Comparação: <code>==</code>, <code>!=</code>, <code>&lt;</code>,
+<code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>.</li>
+<li>Lógicos: <code>&amp;&amp;</code>, <code>||</code>,
+<code>!</code>.</li>
+</ul>
+<p>Por exemplo:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> <span class="dv">5</span><span class="ot">;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="dv">3</span><span class="ot">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="va">$c</span> <span class="op">=</span> <span class="va">$a</span> <span class="op">+</span> <span class="va">$b</span><span class="ot">;</span> <span class="co">// $c agora contém 8</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="va">$d</span> <span class="op">=</span> (<span class="va">$a</span> <span class="op">&gt;</span> <span class="va">$b</span>)<span class="ot">;</span> <span class="co">// $d agora contém true</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="va">$e</span> <span class="op">=</span> (<span class="va">$a</span> <span class="op">==</span> <span class="va">$b</span>)<span class="ot">;</span> <span class="co">// $e agora contém false</span></span></code></pre></div>
+<p>Neste exemplo, usamos o operador aritmético <code>+</code> para somar
+as variáveis <code>$a</code> e <code>$b</code>, o operador de comparação
+<code>&gt;</code> para comparar as variáveis <code>$a</code> e
+<code>$b</code>, e o operador de comparação <code>==</code> para
+comparar as variáveis <code>$a</code> e <code>$b</code>. O resultado
+dessas operações é armazenado em outras variáveis.</p>
+<h2
+id="estruturas-de-controle-de-fluxo-if-else-switch-case-loops">Estruturas
+de controle de fluxo: if-else, switch-case, loops</h2>
+<p>As estruturas de controle de fluxo permitem que o programa execute
+diferentes ações com base em determinadas condições ou repetir um bloco
+de código várias vezes. As principais estruturas de controle de fluxo em
+PHP são o if-else, switch-case e os loops for, while e foreach.</p>
+<h3 id="estrutura-condicional-if-else">Estrutura condicional
+if-else</h3>
+<p>A estrutura condicional if-else é utilizada para executar diferentes
+blocos de código com base em uma condição. A sintaxe básica é a
+seguinte:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (condição) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado se a condição for verdadeira</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado se a condição for falsa</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Também é possível encadear várias estruturas condicionais if-else
+utilizando a sintaxe else if:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (condição1) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado se a condição1 for verdadeira</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (condição2) {</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado se a condição2 for verdadeira</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado se todas as condições forem falsas</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="estrutura-condicional-switch-case">Estrutura condicional
+switch-case</h3>
+<p>A estrutura condicional switch-case é utilizada para selecionar um
+bloco de código a ser executado com base em um valor. A sintaxe básica é
+a seguinte:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> (valor) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> valor1<span class="ot">:</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// código a ser executado se o valor for igual a valor1</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="ot">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> valor2<span class="ot">:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// código a ser executado se o valor for igual a valor2</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="ot">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// mais casos...</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">default</span><span class="ot">:</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// código a ser executado se nenhum caso anterior for correspondido</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="ot">;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="loops">Loops</h3>
+<p>Os loops são estruturas de controle de fluxo que permitem repetir um
+bloco de código várias vezes. Existem três tipos de loops em PHP: for,
+while e foreach.</p>
+<h4 id="loop-for">Loop for</h4>
+<p>O loop for é utilizado quando se sabe antecipadamente quantas vezes o
+bloco de código deve ser repetido. A sintaxe básica é a seguinte:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="va">$i</span> <span class="op">=</span> valor_inicial<span class="ot">;</span> <span class="va">$i</span> <span class="op">&lt;</span> valor_final<span class="ot">;</span> <span class="va">$i</span><span class="op">++</span>) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado em cada iteração</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="loop-while">Loop while</h4>
+<p>O loop while é utilizado quando não se sabe antecipadamente quantas
+vezes o bloco de código deve ser repetido. A sintaxe básica é a
+seguinte:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (condição) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado em cada iteração</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="loop-foreach">Loop foreach</h4>
+<p>O loop foreach é utilizado para percorrer arrays e objetos. A sintaxe
+básica é a seguinte:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (<span class="va">$array</span> <span class="kw">as</span> <span class="va">$valor</span>) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado para cada valor do array</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>É possível também utilizar o foreach para obter o índice e o valor de
+cada elemento do array:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (<span class="va">$array</span> <span class="kw">as</span> <span class="va">$indice</span> =&gt; <span class="va">$valor</span>) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// código a ser executado para cada índice e valor do array</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h2 id="funções-e-escopo-de-variáveis">Funções e escopo de
+variáveis</h2>
+<h3 id="definição-e-declaração-de-funções">Definição e declaração de
+funções</h3>
+<p>Uma função em PHP é um bloco de código que pode ser chamado em
+diferentes partes do script. Ela pode receber argumentos, processá-los e
+retornar um resultado.</p>
+<p>Para declarar uma função em PHP, utiliza-se a palavra-chave
+<code>function</code>, seguida pelo nome da função e pelos parâmetros
+entre parênteses. Por fim, o bloco de código da função é delimitado
+pelas chaves <code>{}</code>.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> nomeDaFuncao(<span class="va">$parametro1</span><span class="ot">,</span> <span class="va">$parametro2</span><span class="ot">,</span> ...) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// bloco de código da função</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="escopo-de-variáveis">Escopo de variáveis</h3>
+<p>O escopo de uma variável define onde ela pode ser acessada dentro do
+script. Em PHP, existem dois tipos de escopo de variáveis: global e
+local.</p>
+<p>As variáveis globais podem ser acessadas em qualquer lugar do script,
+incluindo dentro das funções. Para declarar uma variável global em PHP,
+utiliza-se a palavra-chave <code>global</code> seguida pelo nome da
+variável.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="va">$variavelGlobal</span> <span class="op">=</span> <span class="st">&quot;Valor global&quot;</span><span class="ot">;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> funcaoExemplo() {</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> <span class="va">$variavelGlobal</span><span class="ot">;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="va">$variavelGlobal</span><span class="ot">;</span> <span class="co">// imprime &quot;Valor global&quot;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>As variáveis locais são definidas dentro de uma função e só podem ser
+acessadas dentro dela. Se uma variável é definida fora da função, ela
+não é acessível dentro dela, a menos que seja passada como
+argumento.</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="va">$variavelGlobal</span> <span class="op">=</span> <span class="st">&quot;Valor global&quot;</span><span class="ot">;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> funcaoExemplo(<span class="va">$variavelLocal</span>) {</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="va">$variavelLocal</span><span class="ot">;</span> <span class="co">// imprime &quot;Valor local&quot;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>funcaoExemplo(<span class="st">&quot;Valor local&quot;</span>)<span class="ot">;</span></span></code></pre></div>
+<h3 id="retorno-de-valores">Retorno de valores</h3>
+<p>Uma função pode retornar um valor usando a palavra-chave
+<code>return</code>. O valor retornado pode ser de qualquer tipo de dado
+em PHP.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> soma(<span class="va">$a</span><span class="ot">,</span> <span class="va">$b</span>) {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">$resultado</span> <span class="op">=</span> <span class="va">$a</span> <span class="op">+</span> <span class="va">$b</span><span class="ot">;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">$resultado</span><span class="ot">;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="va">$soma</span> <span class="op">=</span> soma(<span class="dv">2</span><span class="ot">,</span> <span class="dv">3</span>)<span class="ot">;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$soma</span><span class="ot">;</span> <span class="co">// imprime 5</span></span></code></pre></div>
+<h3 id="exemplo-completo-de-função-em-php">Exemplo completo de função em
+PHP</h3>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> calculaMedia(<span class="va">$notas</span>) {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">$soma</span> <span class="op">=</span> <span class="dv">0</span><span class="ot">;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">$quantidadeNotas</span> <span class="op">=</span> <span class="fu">sizeof</span>(<span class="va">$notas</span>)<span class="ot">;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="va">$i</span> <span class="op">=</span> <span class="dv">0</span><span class="ot">;</span> <span class="va">$i</span> <span class="op">&lt;</span> <span class="va">$quantidadeNotas</span><span class="ot">;</span> <span class="va">$i</span><span class="op">++</span>) {</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">$soma</span> <span class="op">+=</span> <span class="va">$notas</span>[<span class="va">$i</span>]<span class="ot">;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="va">$media</span> <span class="op">=</span> <span class="va">$soma</span> <span class="op">/</span> <span class="va">$quantidadeNotas</span><span class="ot">;</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">$media</span><span class="ot">;</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="va">$notasAluno</span> <span class="op">=</span> <span class="dt">array</span>(<span class="dv">7</span><span class="ot">,</span> <span class="dv">8</span><span class="ot">,</span> <span class="dv">9</span>)<span class="ot">;</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="va">$mediaAluno</span> <span class="op">=</span> calculaMedia(<span class="va">$notasAluno</span>)<span class="ot">;</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">&quot;A média do aluno é: &quot;</span> <span class="op">.</span> <span class="va">$mediaAluno</span><span class="ot">;</span></span></code></pre></div>
+<p>Nesse exemplo, a função <code>calculaMedia</code> recebe um array com
+as notas do aluno, calcula a média e retorna o valor para a variável
+<code>$mediaAluno</code>. A função utiliza um loop <code>for</code> para
+somar todas as notas do array e depois divide pelo tamanho do array para
+obter a média.</p>
+<h2 id="array-e-manipulação-de-strings">Array e manipulação de
+strings</h2>
+<h3 id="arrays-em-php">Arrays em PHP</h3>
+<p>Arrays são estruturas de dados que permitem armazenar uma coleção de
+valores sob um único nome. Em PHP, um array pode conter valores de tipos
+diferentes, como números, strings e até mesmo outros arrays. A sintaxe
+para criar um array é a seguinte:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="va">$array</span> <span class="op">=</span> <span class="dt">array</span>(valor1<span class="ot">,</span> valor2<span class="ot">,</span> valor3<span class="ot">,</span> ...)<span class="ot">;</span></span></code></pre></div>
+<p>ou</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="va">$array</span> <span class="op">=</span> [valor1<span class="ot">,</span> valor2<span class="ot">,</span> valor3<span class="ot">,</span> ...]<span class="ot">;</span></span></code></pre></div>
+<p>Para acessar um valor em um array, utilizamos o seu índice, que é um
+número inteiro que representa a posição do valor no array. O primeiro
+elemento de um array tem índice 0, o segundo índice 1 e assim por
+diante. Por exemplo:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="va">$frutas</span> <span class="op">=</span> <span class="dt">array</span>(<span class="st">&#39;maçã&#39;</span><span class="ot">,</span> <span class="st">&#39;banana&#39;</span><span class="ot">,</span> <span class="st">&#39;laranja&#39;</span>)<span class="ot">;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$frutas</span>[<span class="dv">0</span>]<span class="ot">;</span> <span class="co">// imprime &#39;maçã&#39;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$frutas</span>[<span class="dv">1</span>]<span class="ot">;</span> <span class="co">// imprime &#39;banana&#39;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$frutas</span>[<span class="dv">2</span>]<span class="ot">;</span> <span class="co">// imprime &#39;laranja&#39;</span></span></code></pre></div>
+<p>Podemos adicionar elementos a um array usando a função
+<code>array_push()</code> ou simplesmente atribuindo um valor a um
+índice inexistente. Por exemplo:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="va">$frutas</span> <span class="op">=</span> <span class="dt">array</span>(<span class="st">&#39;maçã&#39;</span><span class="ot">,</span> <span class="st">&#39;banana&#39;</span><span class="ot">,</span> <span class="st">&#39;laranja&#39;</span>)<span class="ot">;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="va">$frutas</span>[] <span class="op">=</span> <span class="st">&#39;abacaxi&#39;</span><span class="ot">;</span> <span class="co">// adiciona &#39;abacaxi&#39; no final do array</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">array_push</span>(<span class="va">$frutas</span><span class="ot">,</span> <span class="st">&#39;limão&#39;</span>)<span class="ot">;</span> <span class="co">// adiciona &#39;limão&#39; no final do array</span></span></code></pre></div>
+<p>Podemos remover elementos de um array usando as funções
+<code>unset()</code> ou <code>array_pop()</code>. Por exemplo:</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="va">$frutas</span> <span class="op">=</span> <span class="dt">array</span>(<span class="st">&#39;maçã&#39;</span><span class="ot">,</span> <span class="st">&#39;banana&#39;</span><span class="ot">,</span> <span class="st">&#39;laranja&#39;</span>)<span class="ot">;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">unset</span>(<span class="va">$frutas</span>[<span class="dv">1</span>])<span class="ot">;</span> <span class="co">// remove o elemento de índice 1 (&#39;banana&#39;)</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">array_pop</span>(<span class="va">$frutas</span>)<span class="ot">;</span> <span class="co">// remove o último elemento do array (&#39;laranja&#39;)</span></span></code></pre></div>
+<p>A função <code>sizeof()</code> retorna o número de elementos em um
+array. A função <code>var_dump()</code> exibe informações sobre uma
+variável, incluindo seu tipo e valor, e é útil para depuração de código.
+Por exemplo:</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="va">$frutas</span> <span class="op">=</span> <span class="dt">array</span>(<span class="st">&#39;maçã&#39;</span><span class="ot">,</span> <span class="st">&#39;banana&#39;</span><span class="ot">,</span> <span class="st">&#39;laranja&#39;</span>)<span class="ot">;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">sizeof</span>(<span class="va">$frutas</span>)<span class="ot">;</span> <span class="co">// imprime 3</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">var_dump</span>(<span class="va">$frutas</span>)<span class="ot">;</span> <span class="co">// exibe informações sobre o array</span></span></code></pre></div>
+<p>Ao tentar acessar um índice que não existe em um array, o PHP retorna
+um erro. Para verificar se um índice existe em um array, podemos usar a
+função <code>array_key_exists()</code> ou, de forma mais geral, a função
+<code>isset()</code>. Por exemplo:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="va">$frutas</span> <span class="op">=</span> <span class="dt">array</span>(<span class="st">&#39;maçã&#39;</span><span class="ot">,</span> <span class="st">&#39;banana&#39;</span><span class="ot">,</span> <span class="st">&#39;laranja&#39;</span>)<span class="ot">;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">array_key_exists</span>(<span class="dv">1</span><span class="ot">,</span> <span class="va">$frutas</span>)) {</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="va">$frutas</span>[<span class="dv">1</span>]<span class="ot">;</span> <span class="co">// imprime &#39;banana&#39;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">&#39;Índice não existe&#39;</span><span class="ot">;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="indexação-associativa">Indexação associativa</h3>
+<p>Os arrays associativos são aqueles que utilizam chaves personalizadas
+ao invés de índices numéricos sequenciais. Eles podem ser criados
+utilizando a sintaxe:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="va">$dados_pessoais</span> <span class="op">=</span> <span class="dt">array</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nome&quot;</span> =&gt; <span class="st">&quot;João&quot;</span><span class="ot">,</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;sobrenome&quot;</span> =&gt; <span class="st">&quot;Silva&quot;</span><span class="ot">,</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;idade&quot;</span> =&gt; <span class="dv">30</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span></code></pre></div>
+<p>ou</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="va">$dados_pessoais</span> <span class="op">=</span> [</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;nome&quot;</span> =&gt; <span class="st">&quot;João&quot;</span><span class="ot">,</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;sobrenome&quot;</span> =&gt; <span class="st">&quot;Silva&quot;</span><span class="ot">,</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;idade&quot;</span> =&gt; <span class="dv">30</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>]<span class="ot">;</span></span></code></pre></div>
+<p>Para acessar um valor específico de um array associativo, utilizamos
+sua chave:</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$dados_pessoais</span>[<span class="st">&quot;nome&quot;</span>]<span class="ot">;</span> <span class="co">// Imprime &quot;João&quot;</span></span></code></pre></div>
+<p>Também podemos adicionar novos elementos a um array associativo
+simplesmente atribuindo um valor a uma chave ainda não existente:</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="va">$dados_pessoais</span>[<span class="st">&quot;cidade&quot;</span>] <span class="op">=</span> <span class="st">&quot;São Paulo&quot;</span><span class="ot">;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$dados_pessoais</span>[<span class="st">&quot;cidade&quot;</span>]<span class="ot">;</span> <span class="co">// Imprime &quot;São Paulo&quot;</span></span></code></pre></div>
+<h3 id="arrays-multidimensionais">Arrays multidimensionais</h3>
+<p>Os arrays multidimensionais são aqueles que contêm outros arrays como
+elementos. Eles podem ser indexados numericamente ou associativamente,
+dependendo do caso. Por exemplo:</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="va">$alunos</span> <span class="op">=</span> <span class="dt">array</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;João&quot;</span> =&gt; <span class="dt">array</span>(<span class="st">&quot;matemática&quot;</span> =&gt; <span class="dv">7</span><span class="ot">,</span> <span class="st">&quot;português&quot;</span> =&gt; <span class="dv">8</span>)<span class="ot">,</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Maria&quot;</span> =&gt; <span class="dt">array</span>(<span class="st">&quot;matemática&quot;</span> =&gt; <span class="dv">9</span><span class="ot">,</span> <span class="st">&quot;português&quot;</span> =&gt; <span class="dv">10</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span></code></pre></div>
+<p>Podemos acessar um valor específico de um array multidimensional
+utilizando múltiplos índices:</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$alunos</span>[<span class="st">&quot;João&quot;</span>][<span class="st">&quot;matemática&quot;</span>]<span class="ot">;</span> <span class="co">// Imprime 7</span></span></code></pre></div>
+<p>Também podemos percorrer um array multidimensional utilizando loops
+aninhados. Por exemplo:</p>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (<span class="va">$alunos</span> <span class="kw">as</span> <span class="va">$nome</span> =&gt; <span class="va">$notas</span>) {</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">&quot;</span><span class="va">$nome</span><span class="st">: &quot;</span><span class="ot">;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">foreach</span> (<span class="va">$notas</span> <span class="kw">as</span> <span class="va">$disciplina</span> =&gt; <span class="va">$nota</span>) {</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">&quot;</span><span class="va">$disciplina</span><span class="st">=</span><span class="va">$nota</span><span class="st"> &quot;</span><span class="ot">;</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">&quot;&lt;br&gt;&quot;</span><span class="ot">;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>O resultado será:</p>
+<pre><code>João: matemática=7 português=8
+Maria: matemática=9 português=10</code></pre>
+<h3 id="manipulação-de-strings-em-php">Manipulação de strings em
+PHP</h3>
+<p>Strings são sequências de caracteres que podem ser manipuladas de
+diversas formas em PHP. Podemos criar strings usando aspas simples ou
+duplas, como por exemplo:</p>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome</span> <span class="op">=</span> <span class="st">&#39;João&#39;</span><span class="ot">;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="va">$sobrenome</span> <span class="op">=</span> <span class="st">&quot;Silva&quot;</span><span class="ot">;</span></span></code></pre></div>
+<p>Podemos concatenar strings usando o operador <code>.</code> ou o
+operador de atribuição combinado <code>.=</code>. Por exemplo:</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_completo</span> <span class="op">=</span> <span class="va">$nome</span> <span class="op">.</span> <span class="st">&#39; &#39;</span> <span class="op">.</span> <span class="va">$sobrenome</span><span class="ot">;</span> <span class="co">// concatenação usando o operador &#39;.&#39;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_completo</span> <span class="op">.=</span> <span class="st">&#39;, Jr.&#39;</span><span class="ot">;</span> <span class="co">// concatenação usando o operador de atribuição combinado &#39;.=&#39;</span></span></code></pre></div>
+<h2 id="funções-comuns-em-php">Funções comuns em PHP</h2>
+<h3 id="funções-de-data-e-hora">Funções de data e hora</h3>
+<p>Em PHP, há uma variedade de funções embutidas para manipulação de
+datas e horas. Algumas das funções mais comuns incluem:</p>
+<ul>
+<li><code>date(formato, timestamp)</code>: retorna uma string formatada
+de acordo com o formato especificado, com base no timestamp fornecido
+(ou no horário atual, se nenhum timestamp for fornecido).</li>
+<li><code>strtotime(time, now)</code>: analisa uma data em uma string e
+a converte em um timestamp Unix.</li>
+<li><code>time()</code>: retorna o timestamp Unix atual.</li>
+</ul>
+<h3 id="funções-de-manipulação-de-arquivos">Funções de manipulação de
+arquivos</h3>
+<p>O PHP também tem uma variedade de funções embutidas para manipulação
+de arquivos. Algumas das funções mais comuns incluem:</p>
+<ul>
+<li><code>fopen(arquivo, modo)</code>: abre um arquivo para leitura ou
+gravação, dependendo do modo especificado.</li>
+<li><code>fclose(arquivo)</code>: fecha um arquivo que foi aberto com
+<code>fopen()</code>.</li>
+<li><code>fgets(arquivo, tamanho)</code>: lê uma linha de um arquivo
+aberto com <code>fopen()</code>.</li>
+<li><code>fwrite(arquivo, string, comprimento)</code>: grava uma string
+em um arquivo aberto com <code>fopen()</code>.</li>
+</ul>
+<h3 id="funções-de-manipulação-de-strings">Funções de manipulação de
+strings</h3>
+<p>PHP também oferece muitas funções para manipulação de strings.
+Algumas das funções mais comuns incluem:</p>
+<ul>
+<li><code>strlen(string)</code>: retorna o comprimento de uma
+string.</li>
+<li><code>substr(string, inicio, comprimento)</code>: retorna uma parte
+de uma string, com base no início e no comprimento especificados.</li>
+<li><code>str_replace(procurar, substituir, string)</code>: substitui
+todas as ocorrências de uma string em outra string.</li>
+</ul>
+<h3 id="funções-matemáticas">Funções matemáticas</h3>
+<p>PHP também oferece funções embutidas para realizar operações
+matemáticas. Algumas das funções mais comuns incluem:</p>
+<ul>
+<li><code>sqrt(numero)</code>: retorna a raiz quadrada de um
+número.</li>
+<li><code>pow(base, expoente)</code>: retorna a base elevada ao
+expoente.</li>
+<li><code>rand(min, max)</code>: retorna um número inteiro aleatório
+entre um mínimo e um máximo especificado.</li>
+</ul>
+<h3 id="exemplo">Exemplo</h3>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Exemplo de uso das funções embutidas de manipulação de datas</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="va">$data_atual</span> <span class="op">=</span> <span class="fu">date</span>(<span class="st">&#39;d/m/Y&#39;</span><span class="ot">,</span> <span class="fu">time</span>())<span class="ot">;</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">&quot;Data atual: </span><span class="va">$data_atual</span><span class="st">&quot;</span><span class="ot">;</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Exemplo de uso das funções embutidas de manipulação de arquivos</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="va">$meu_arquivo</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="st">&quot;meu_arquivo.txt&quot;</span><span class="ot">,</span> <span class="st">&quot;w&quot;</span>)<span class="ot">;</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(<span class="va">$meu_arquivo</span><span class="ot">,</span> <span class="st">&quot;Este é o conteúdo do meu arquivo.&quot;</span>)<span class="ot">;</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fclose</span>(<span class="va">$meu_arquivo</span>)<span class="ot">;</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Exemplo de uso das funções embutidas de manipulação de strings</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="va">$minha_string</span> <span class="op">=</span> <span class="st">&quot;Esta é uma string de exemplo.&quot;</span><span class="ot">;</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="va">$substituida_string</span> <span class="op">=</span> <span class="fu">str_replace</span>(<span class="st">&quot;exemplo&quot;</span><span class="ot">,</span> <span class="st">&quot;amostra&quot;</span><span class="ot">,</span> <span class="va">$minha_string</span>)<span class="ot">;</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$substituida_string</span><span class="ot">;</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="co">// Exemplo de uso das funções embutidas matemáticas</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="va">$numero</span> <span class="op">=</span> <span class="dv">9</span><span class="ot">;</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="va">$raiz_quadrada</span> <span class="op">=</span> <span class="fu">sqrt</span>(<span class="va">$numero</span>)<span class="ot">;</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">&quot;A raiz quadrada de </span><span class="va">$numero</span><span class="st"> é </span><span class="va">$raiz_quadrada</span><span class="st">.&quot;</span><span class="ot">;</span></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div>
+<h2 id="manipulação-de-arquivos-csv-com-php">Manipulação de arquivos CSV
+com PHP</h2>
+<h3 id="o-que-é-um-arquivo-csv">O que é um arquivo CSV?</h3>
+<p>CSV é uma sigla para <em>Comma Separated Values</em> (Valores
+Separados por Vírgula). É um formato de arquivo simples utilizado para
+armazenar dados de uma tabela em que cada linha representa um registro e
+as colunas são separadas por vírgulas. É um formato de arquivo comum
+para a troca de dados entre diferentes programas e sistemas.</p>
+<h3 id="lendo-um-arquivo-csv-com-php">Lendo um arquivo CSV com PHP</h3>
+<p>Para ler um arquivo CSV com PHP, usamos a função <code>fopen()</code>
+para abrir o arquivo, e depois usamos a função <code>fgetcsv()</code>
+para ler cada linha do arquivo. O código abaixo mostra como ler um
+arquivo CSV chamado <code>dados.csv</code> e imprimir o conteúdo na
+tela:</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="va">$handle</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="st">&#39;dados.csv&#39;</span><span class="ot">,</span> <span class="st">&#39;r&#39;</span>)<span class="ot">;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$handle</span>) {</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> ((<span class="va">$linha</span> <span class="op">=</span> <span class="fu">fgetcsv</span>(<span class="va">$handle</span><span class="ot">,</span> <span class="dv">1000</span><span class="ot">,</span> <span class="st">&#39;,&#39;</span>)) <span class="op">!==</span> <span class="kw">false</span>) {</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Imprime cada coluna da linha</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">foreach</span> (<span class="va">$linha</span> <span class="kw">as</span> <span class="va">$coluna</span>) {</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">echo</span> <span class="va">$coluna</span> <span class="op">.</span> <span class="st">&#39; &#39;</span><span class="ot">;</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">&#39;&lt;br /&gt;&#39;</span><span class="ot">;</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fclose</span>(<span class="va">$handle</span>)<span class="ot">;</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Neste exemplo, o parâmetro <code>1000</code> da função
+<code>fgetcsv()</code> define o tamanho máximo de cada linha do arquivo,
+e o parâmetro <code>','</code> indica que as colunas são separadas por
+vírgulas. A função <code>fgetcsv()</code> retorna um array contendo os
+valores de cada coluna da linha atual do arquivo.</p>
+<h3 id="escrevendo-em-um-arquivo-csv-com-php">Escrevendo em um arquivo
+CSV com PHP</h3>
+<p>Para escrever em um arquivo CSV com PHP, usamos a função
+<code>fopen()</code> para abrir o arquivo em modo de escrita
+(<code>'w'</code>), e depois usamos a função <code>fputcsv()</code> para
+escrever cada linha no arquivo. O código abaixo mostra como escrever um
+arquivo CSV com duas linhas:</p>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="va">$handle</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="st">&#39;dados.csv&#39;</span><span class="ot">,</span> <span class="st">&#39;w&#39;</span>)<span class="ot">;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$handle</span>) {</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">$linha1</span> <span class="op">=</span> <span class="dt">array</span>(<span class="st">&#39;João&#39;</span><span class="ot">,</span> <span class="st">&#39;Silva&#39;</span><span class="ot">,</span> <span class="st">&#39;joao.silva@example.com&#39;</span>)<span class="ot">;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">$linha2</span> <span class="op">=</span> <span class="dt">array</span>(<span class="st">&#39;Maria&#39;</span><span class="ot">,</span> <span class="st">&#39;Souza&#39;</span><span class="ot">,</span> <span class="st">&#39;maria.souza@example.com&#39;</span>)<span class="ot">;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fputcsv</span>(<span class="va">$handle</span><span class="ot">,</span> <span class="va">$linha1</span>)<span class="ot">;</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fputcsv</span>(<span class="va">$handle</span><span class="ot">,</span> <span class="va">$linha2</span>)<span class="ot">;</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fclose</span>(<span class="va">$handle</span>)<span class="ot">;</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Neste exemplo, as variáveis <code>$linha1</code> e
+<code>$linha2</code> contêm os valores das colunas de cada linha do
+arquivo, e a função <code>fputcsv()</code> escreve cada linha no
+arquivo. As colunas de cada linha são separadas por vírgulas, conforme
+definido pelo padrão CSV.</p>
+<h1 id="manipulação-de-arquivos-e-crud">Manipulação de Arquivos e
+CRUD</h1>
+<h2
+id="manipulação-de-arquivos-com-php-criar-abrir-ler-escrever-fechar-e-excluir-arquivos">Manipulação
+de arquivos com PHP: criar, abrir, ler, escrever, fechar e excluir
+arquivos</h2>
+<h3 id="criar-um-arquivo">Criar um arquivo</h3>
+<p>Para criar um novo arquivo com o PHP, utilizamos a função
+<code>fopen()</code>, que recebe como parâmetros o nome do arquivo e o
+modo de abertura. Por exemplo, para criar um arquivo chamado
+“arquivo.txt” no modo de escrita, utilizamos o seguinte código:</p>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_arquivo</span> <span class="op">=</span> <span class="st">&quot;arquivo.txt&quot;</span><span class="ot">;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="va">$modo_abertura</span> <span class="op">=</span> <span class="st">&quot;w&quot;</span><span class="ot">;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="va">$handle</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="va">$nome_arquivo</span><span class="ot">,</span> <span class="va">$modo_abertura</span>)<span class="ot">;</span></span></code></pre></div>
+<h3 id="abrir-um-arquivo">Abrir um arquivo</h3>
+<p>Para abrir um arquivo existente com o PHP, utilizamos a função
+<code>fopen()</code>, que recebe como parâmetros o nome do arquivo e o
+modo de abertura. Por exemplo, para abrir um arquivo chamado
+“arquivo.txt” no modo de leitura, utilizamos o seguinte código:</p>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_arquivo</span> <span class="op">=</span> <span class="st">&quot;arquivo.txt&quot;</span><span class="ot">;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="va">$modo_abertura</span> <span class="op">=</span> <span class="st">&quot;r&quot;</span><span class="ot">;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="va">$handle</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="va">$nome_arquivo</span><span class="ot">,</span> <span class="va">$modo_abertura</span>)<span class="ot">;</span></span></code></pre></div>
+<h3 id="ler-o-conteúdo-de-um-arquivo">Ler o conteúdo de um arquivo</h3>
+<p>Para ler o conteúdo de um arquivo com o PHP, utilizamos a função
+<code>fread()</code>, que recebe como parâmetros o ponteiro do arquivo
+(retornado pela função <code>fopen()</code>) e o número de bytes a serem
+lidos. Por exemplo, para ler todo o conteúdo de um arquivo chamado
+“arquivo.txt”, utilizamos o seguinte código:</p>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_arquivo</span> <span class="op">=</span> <span class="st">&quot;arquivo.txt&quot;</span><span class="ot">;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="va">$modo_abertura</span> <span class="op">=</span> <span class="st">&quot;r&quot;</span><span class="ot">;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="va">$handle</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="va">$nome_arquivo</span><span class="ot">,</span> <span class="va">$modo_abertura</span>)<span class="ot">;</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="va">$conteudo</span> <span class="op">=</span> <span class="fu">fread</span>(<span class="va">$handle</span><span class="ot">,</span> <span class="fu">filesize</span>(<span class="va">$nome_arquivo</span>))<span class="ot">;</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$conteudo</span><span class="ot">;</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="fu">fclose</span>(<span class="va">$handle</span>)<span class="ot">;</span></span></code></pre></div>
+<p>No exemplo acima, utilizamos a função <code>filesize()</code> para
+obter o tamanho do arquivo em bytes.</p>
+<h3 id="escrever-no-arquivo">Escrever no arquivo</h3>
+<p>Para escrever no arquivo com o PHP, utilizamos a função
+<code>fwrite()</code>, que recebe como parâmetros o ponteiro do arquivo
+(retornado pela função <code>fopen()</code>) e a string a ser escrita.
+Por exemplo, para escrever a string “Olá, mundo!” em um arquivo chamado
+“arquivo.txt”, utilizamos o seguinte código:</p>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_arquivo</span> <span class="op">=</span> <span class="st">&quot;arquivo.txt&quot;</span><span class="ot">;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="va">$modo_abertura</span> <span class="op">=</span> <span class="st">&quot;w&quot;</span><span class="ot">;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="va">$handle</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="va">$nome_arquivo</span><span class="ot">,</span> <span class="va">$modo_abertura</span>)<span class="ot">;</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(<span class="va">$handle</span><span class="ot">,</span> <span class="st">&quot;Olá, mundo!&quot;</span>)<span class="ot">;</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fclose</span>(<span class="va">$handle</span>)<span class="ot">;</span></span></code></pre></div>
+<h3 id="fechar-um-arquivo">Fechar um arquivo</h3>
+<p>Após a manipulação de um arquivo com o PHP, é importante fechá-lo
+utilizando a função <code>fclose()</code>. Por exemplo, após escrever a
+string “Olá, mundo!” em um arquivo chamado “arquivo.txt”, utilizamos o
+seguinte código para fechá-lo:</p>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_arquivo</span> <span class="op">=</span> <span class="st">&quot;arquivo.txt&quot;</span><span class="ot">;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="va">$modo_abertura</span> <span class="op">=</span> <span class="st">&quot;w&quot;</span><span class="ot">;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="va">$handle</span> <span class="op">=</span> <span class="fu">fopen</span>(<span class="va">$nome_arquivo</span><span class="ot">,</span> <span class="va">$modo_abertura</span>)<span class="ot">;</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(<span class="va">$handle</span><span class="ot">,</span> <span class="st">&quot;Olá, mundo!&quot;</span>)<span class="ot">;</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fclose</span>(<span class="va">$handle</span>)<span class="ot">;</span></span></code></pre></div>
+<p>Caso o arquivo não tenha sido fechado no código, ao final da execução
+do script ele é automaticamente fechado.</p>
+<h3 id="excluir-um-arquivo">Excluir um arquivo</h3>
+<p>Para excluir um arquivo com o PHP, utilizamos a função
+<code>unlink()</code>, que recebe como parâmetro o nome do arquivo a ser
+excluído. Por exemplo, para excluir um arquivo chamado “arquivo.txt”,
+utilizamos o seguinte código:</p>
+<div class="sourceCode" id="cb49"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="va">$nome_arquivo</span> <span class="op">=</span> <span class="st">&quot;arquivo.txt&quot;</span><span class="ot">;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unlink</span>(<span class="va">$nome_arquivo</span>)<span class="ot">;</span></span></code></pre></div>
+<h2 id="conceitos-crud-create-read-update-delete">Conceitos CRUD
+(Create, Read, Update, Delete)</h2>
+<p>O CRUD (acrônimo em inglês para Create, Read, Update e Delete) é um
+conjunto de operações básicas que podem ser realizadas em um sistema ou
+aplicação que envolve a manipulação de dados. O objetivo do CRUD é
+prover uma interface simples e intuitiva para que os usuários possam
+gerenciar informações armazenadas em uma base de dados ou em outros
+tipos de sistemas.</p>
+<p>Cada uma das quatro operações básicas do CRUD é descrita a
+seguir:</p>
+<ul>
+<li><p><strong>Create (Criação)</strong>: É a operação que permite criar
+novos registros em uma base de dados ou em outra forma de sistema. Essa
+operação é comumente realizada por meio de formulários ou outras
+interfaces que permitem a entrada de dados.</p></li>
+<li><p><strong>Read (Leitura)</strong>: É a operação que permite
+visualizar os dados já armazenados em uma base de dados ou em outro tipo
+de sistema. Essa operação é normalmente realizada por meio de consultas
+ou outros tipos de interfaces que permitem buscar informações
+específicas.</p></li>
+<li><p><strong>Update (Atualização)</strong>: É a operação que permite
+modificar os dados existentes em uma base de dados ou em outro tipo de
+sistema. Essa operação é geralmente realizada por meio de formulários ou
+outras interfaces que permitem a edição de informações
+existentes.</p></li>
+<li><p><strong>Delete (Exclusão)</strong>: É a operação que permite
+remover dados existentes em uma base de dados ou em outro tipo de
+sistema. Essa operação é normalmente realizada por meio de interfaces
+que permitem a seleção de informações a serem removidas.</p></li>
+</ul>
+<p>O CRUD é utilizado em diversos tipos de aplicações que envolvem o
+gerenciamento de dados, como sistemas de gerenciamento de conteúdo,
+sistemas de gerenciamento de relacionamento com clientes (CRM), sistemas
+de gerenciamento de recursos humanos (RH) e muitos outros. A utilização
+do CRUD facilita a implementação de interfaces simples e intuitivas para
+os usuários, permitindo que eles possam manipular dados de forma fácil e
+eficiente.</p>
+<h2 id="implementando-crud-em-php-usando-arquivos-csv">Implementando
+CRUD em PHP usando arquivos CSV</h2>
+<h3 id="formulário-e-back-end-para-criar-registro">Formulário e back-end
+para criar registro</h3>
+<h3 id="página-de-leitura-dos-dados">Página de leitura dos dados</h3>
+<h3 id="removendo-registro">Removendo registro</h3>
+<h3 id="formulário-de-edição-de-registro">Formulário de edição de
+registro</h3>
+<h3 id="back-end-para-atualização-de-registro">Back-end para atualização
+de registro</h3>
+<h1 id="conexão-com-banco-de-dados">Conexão com Banco de Dados</h1>
+<h2 id="introdução-a-bancos-de-dados">Introdução a bancos de dados</h2>
+<h2 id="conexão-com-banco-de-dados-usando-mysqli-e-pdo">Conexão com
+banco de dados usando mysqli e PDO</h2>
+<h2 id="execução-de-consultas-sql-usando-php">Execução de consultas SQL
+usando PHP</h2>
+<h2 id="prevenção-de-sql-injection">Prevenção de SQL Injection</h2>
+<h1 id="crud-com-banco-de-dados">CRUD com Banco de Dados</h1>
+<h2 id="implementação-do-crud-em-php-usando-mysql">Implementação do CRUD
+em PHP usando MySQL</h2>
+<h2 id="manipulação-de-dados-em-tabelas-mysql-com-php">Manipulação de
+dados em tabelas MySQL com PHP</h2>
+<h1 id="autenticação-e-autorização">Autenticação e Autorização</h1>
+<h2 id="cookies-e-sessões">Cookies e sessões</h2>
+<h2 id="mecanismos-de-autenticação-usando-sessões-em-php">Mecanismos de
+autenticação usando sessões em PHP</h2>
+<h2 id="apis-e-como-trabalhar-com-elas">APIs e como trabalhar com
+elas</h2>
+<h2 id="autenticação-usando-apis-php-e-jwt">Autenticação usando APIs PHP
+e JWT</h2>
+<h1 id="conexão-entre-front-end-e-back-end">Conexão entre Front-End e
+Back-End</h1>
+<h2 id="introdução-à-conexão-entre-front-end-e-back-end">Introdução à
+conexão entre front-end e back-end</h2>
+<h2 id="como-enviar-dados-de-formulários-html-para-um-script-php">Como
+enviar dados de formulários HTML para um script PHP</h2>
+<h2
+id="como-enviar-respostas-json-de-volta-para-o-front-end-a-partir-do-back-end">Como
+enviar respostas JSON de volta para o front-end a partir do
+back-end</h2>
+<h2 id="cors">CORS</h2>
+<h3 id="definição-e-funcionamento-1">Definição e funcionamento</h3>
+<h3 id="como-lidar-com-cors-no-desenvolvimento-web">Como lidar com CORS
+no desenvolvimento web</h3>
+</body>
+</html>
